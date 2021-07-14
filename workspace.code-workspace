@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+
+    "go.installDependenciesWhenBuilding":true,
+    "editor.renderWhitespace": "trailing"
+  }
+}
