@@ -1,0 +1,30 @@
+		pos := len(cpass.pass) - 1 // last character of pass
+
+		for k := 0; k < len(cpass.pass); k++ {
+			randomCount := Roll(25, 10)
+			for j := 0; j < randomCount; j++ {
+				v.Clear()
+				v.SetWritePos(0, 1)
+				v.FgColor = gocui.ColorWhite
+				fmt.Fprintf(v, "%s", cpass.crypt)
+
+				rc := byte(Roll(1, 92) + 32)
+				w := (width / 2) - (len(cpass.pass) / 2)
+				v.SetWritePos(w, 0)
+				for i := 0; i < len(cpass.pass); i++ {
+					if i != pos {
+						v.FgColor = gocui.ColorWhite
+						v.BgColor = gocui.ColorBlack
+						fmt.Fprintf(v, "%s", string(cpass.pass[i]))
+					} else {
+						v.FgColor = gocui.ColorBlack
+						v.BgColor = gocui.ColorWhite
+						fmt.Fprintf(v, "%s", string(rc))
+					}
+					g.Update(func(g *gocui.Gui) error {
+						return nil
+					})
+				}
+			}
+
+		}
