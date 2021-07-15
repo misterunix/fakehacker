@@ -36,6 +36,7 @@ func hack1(g *gocui.Gui, v *gocui.View, name string) {
 	var lines []string
 
 	mx, my := v.Size()
+	//fmt.Fprintln(os.Stderr, mx, my)
 	width := mx - 1
 	height := my
 
@@ -43,9 +44,6 @@ func hack1(g *gocui.Gui, v *gocui.View, name string) {
 	for _, k := range ss {
 		y := Chunks(k, width)
 		lines = append(lines, y...)
-		//for _, t := range y {
-		//	lines = append(lines, t)
-		//}
 	}
 
 	l := len(lines)
@@ -59,11 +57,6 @@ func hack1(g *gocui.Gui, v *gocui.View, name string) {
 		//fmt.Fprintf(v, "%-48v", lastlines[i])
 		fmt.Fprintf(v, "%v", lastlines[i])
 		g.Update(func(g *gocui.Gui) error {
-			//g.SetCurrentView(name)
-			//v, err := g.View(name)
-			//if err != nil {
-			// handle error
-			//}
 			return nil
 		})
 		time.Sleep(80 * time.Millisecond)
@@ -80,24 +73,16 @@ func hack1(g *gocui.Gui, v *gocui.View, name string) {
 		for m := 0; m <= height-2; m++ {
 			lastlines[m] = lastlines[m+1]
 			v.SetWritePos(0, m)
-			//fmt.Fprintf(v, "%-48v", lastlines[m])
 			fmt.Fprintf(v, "%v", lastlines[m])
 		}
 		v.SetWritePos(0, height-1)
 		lastlines[height-1] = lines[cp]
-		//fmt.Fprintf(v, "%-48v", lastlines[3])
 		fmt.Fprintf(v, "%v", lastlines[height-1])
 		cp++
 
 		g.Update(func(g *gocui.Gui) error {
-			//g.SetCurrentView(name)
-			//v, err := g.View(name)
-			//if err != nil {
-			// handle error
-			//}
 			return nil
 		})
-		//		fmt.Fprintf(os.Stderr, "%s", string(text[cp]))
 
 		time.Sleep(80 * time.Millisecond)
 	}
@@ -167,10 +152,16 @@ func layout(g *gocui.Gui) error {
 }
 
 func sourceWindow(g *gocui.Gui) error {
-	//maxX, maxY := g.Size()
+	maxX, maxY := g.Size()
+	// 50 wide from the right side half the height
+	x0 := maxX - 51
+	y0 := 0
+	x1 := maxX - 1
+	y1 := maxY / 2
+
 	//name := fmt.Sprintf("hack1", idxView)
 	name := "hack1"
-	v, err := g.SetView(name, 0, 0, 50, 12, 0) // 48x10
+	v, err := g.SetView(name, x0, y0, x1, y1, 0) // 48x10
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
@@ -316,29 +307,35 @@ func Chunks(s string, chunkSize int) []string {
 	if chunkSize >= len(s) {
 		return []string{s}
 	}
+
+	//tt := fmt.Sprintf("%%-%d", chunkSize)
+
+	//fmt.Fprintln(os.Stderr, chunkSize)
 	var chunks []string = make([]string, 0, (len(s)-1)/chunkSize+1)
 	currentLen := 0
 	currentStart := 0
 	for i := range s {
 		if currentLen == chunkSize {
-			//tt := fmt.Sprintf("%%-%d", chunkSize)
-			//ttt := fmt.Sprintf(tt, s[currentStart:i])
+			//	fmt.Fprintf(os.Stderr, "::%d\n", len(s[currentStart:i]))
 			chunks = append(chunks, s[currentStart:i])
-			//chunks = append(chunks, ttt)
 			currentLen = 0
 			currentStart = i
 		}
 		currentLen++
 	}
 	chunks = append(chunks, s[currentStart:])
-	for i := range chunks {
-		chunks[i] = strings.TrimLeft(chunks[i], "\t")
-		chunks[i] = strings.TrimSpace(chunks[i])
-		chunks[i] = strings.TrimRight(chunks[i], "\n")
-		chunks[i] = strings.TrimRight(chunks[i], "\r")
-		chunks[i] = strings.TrimRight(chunks[i], "\n")
-		tt := fmt.Sprintf("%%-%d", chunkSize)
-		ttt := fmt.Sprintf(tt, chunks[i])
+
+	for i, tl := range chunks {
+		/*
+			chunks[i] = strings.TrimLeft(chunks[i], "\t")
+			chunks[i] = strings.TrimSpace(chunks[i])
+			chunks[i] = strings.TrimRight(chunks[i], "\n")
+			chunks[i] = strings.TrimRight(chunks[i], "\r")
+			chunks[i] = strings.TrimRight(chunks[i], "\n")
+		*/
+		tt := fmt.Sprintf("%%-%dv", chunkSize)
+		ttt := fmt.Sprintf(tt, tl)
+		//fmt.Fprintf(os.Stderr, "%s %d\n", ttt, len(ttt))
 		chunks[i] = ttt
 	}
 	return chunks
@@ -354,7 +351,8 @@ func readLines(path string) ([]string, error) {
 	var lines []string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
+		ss := strings.TrimSpace(scanner.Text())
+		lines = append(lines, ss)
 	}
 	return lines, scanner.Err()
 }
