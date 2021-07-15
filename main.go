@@ -2,7 +2,9 @@ package main
 
 import (
 	"bufio"
+	"crypto/rand"
 	"fmt"
+	"math/big"
 	"os"
 	"strings"
 	"time"
@@ -15,6 +17,24 @@ var (
 	curView = -1
 	idxView = 0
 )
+
+func Roll(count, sides int) int {
+	var t int
+	for i := 0; i < count; i++ {
+		r := cryptoRandSecure(int64(sides)) + 1
+		//fmt.Println("roll: ", r)
+		t = t + int(r)
+	}
+	return t
+}
+
+func cryptoRandSecure(max int64) int64 {
+	nBig, err := rand.Int(rand.Reader, big.NewInt(max))
+	if err != nil {
+		return 0
+	}
+	return nBig.Int64()
+}
 
 func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	// password : holds the password and the encrypted password
@@ -57,34 +77,41 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	v.Wrap = false
 	v.Autoscroll = false
 
-	mx, my := v.Size()
+	mx, _ := v.Size()
 
 	width := mx - 1
-	height := my
+	//height := my
 
-	for currentPassLine, cpass := range passwords {
+	for _, cpass := range passwords {
 
-		pos := len(cpass)
+		pos := len(cpass.pass) // last character of pass
 
-		for {
-			v.Clear()
+		for k := 0; k < len(cpass.pass); k++ {
+			randomCount := Roll(25, 10)
+			for j := 0; j < randomCount; j++ {
+				v.Clear()
+				v.SetWritePos(0, 1)
+				v.FgColor = gocui.ColorWhite
+				fmt.Fprintf(v, "%s", cpass.crypt)
 
-			w := (width / 2) - (len(passwords[currentPassLine].pass) / 2)
-			v.SetWritePos(w, 0)
-			for i := 0; i < len(passwords[currentPassLine].pass); i++ {
-				if i != pos {
-					v.FgColor = gocui.ColorWhite
-					v.BgColor = gocui.ColorBlack
-					fmt.Fprintf(v, "%s", passwords[currentPassLine].pass[i])
-				} else {
-					v.FgColor = gocui.ColorBlack
-					v.BgColor = gocui.ColorWhite
-					fmt.Fprintf(v, "%s", passwords[currentPassLine].pass[i])
+				rc := byte(Roll(1, 92) + 32)
+				w := (width / 2) - (len(cpass.pass) / 2)
+				v.SetWritePos(w, 0)
+				for i := 0; i < len(cpass.pass); i++ {
+					if i != pos {
+						v.FgColor = gocui.ColorWhite
+						v.BgColor = gocui.ColorBlack
+						fmt.Fprintf(v, "%s", string(cpass.pass[i]))
+					} else {
+						v.FgColor = gocui.ColorBlack
+						v.BgColor = gocui.ColorWhite
+						fmt.Fprintf(v, "%s", string(rc))
+					}
+					g.Update(func(g *gocui.Gui) error {
+						return nil
+					})
 				}
 			}
-			v.SetWritePos(0, 1)
-			v.FgColor = gocui.ColorWhite
-			fmt.Fprintf(v, "%s", passwords[currentPassLine].crypt)
 
 		}
 	}
@@ -185,6 +212,12 @@ func main() {
 	}
 
 	err = sourceWindow(g)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	err = passwordCrack(g)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
