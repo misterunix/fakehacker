@@ -85,22 +85,37 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	//height := my
 
 	for _, cpass := range passwords {
+
+		//v.FgColor = gocui.ColorWhite
+		//v.BgColor = gocui.ColorBlack
 		v.Clear()
-
 		v.SetWritePos(0, 0)
-		v.FgColor = gocui.ColorWhite
-		v.BgColor = gocui.ColorBlack
-		fmt.Fprintf(v, "%s", cpass.crypt)
+		fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
 
-		//pos := len(cpass.pass) - 1 // last character of pass
+		pos := len(cpass.pass) - 1 // last character of pass
 		//rc := byte(Roll(1, 92) + 32)
 
 		v.SetWritePos(0, 1)
 		wp := (width / 2) - (len(cpass.pass) / 2)
 		pad := strings.Repeat(" ", wp)
-		//tt := fmt.Sprintf("%%%ds", wp)
-		fmt.Fprintf(v, "%s%s", pad, cpass.pass)
+		fmt.Fprintf(v, "%s", pad)
 
+		for i := 0; i < len(cpass.pass); i++ {
+			//v.SetWritePos(w+i, 0)
+			if i != pos {
+				//v.FgColor = gocui.ColorWhite
+				//v.BgColor = gocui.ColorBlack
+				fmt.Fprintf(v, "\033[37;40m%s", string(cpass.pass[i]))
+			} else {
+				//v.FgColor = gocui.ColorBlack
+				//v.BgColor = gocui.ColorWhite
+				fmt.Fprintf(v, "\033[30;47m%s", string(cpass.pass[i]))
+			}
+		}
+
+		//fmt.Fprintf(v, "%s", cpass.pass)
+		//v.FgColor = gocui.ColorWhite
+		//v.BgColor = gocui.ColorBlack
 		g.Update(func(g *gocui.Gui) error {
 			return nil
 		})
