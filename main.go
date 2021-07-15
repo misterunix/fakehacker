@@ -16,6 +16,81 @@ var (
 	idxView = 0
 )
 
+func pass1(g *gocui.Gui, v *gocui.View, name string) {
+	// password : holds the password and the encrypted password
+	type password struct {
+		pass  string
+		crypt string
+	}
+
+	// passwords : sline of type password
+	var passwords []password
+	passwords = make([]password, 1000) // file is 1000 entries so allocate memory
+
+	// read the file in to a slice of strings
+	plines, err := readLines("password.txt")
+	if err != nil {
+		return
+	}
+
+	// loop through the lines from the file and add to slice passwords
+	for _, pass := range plines {
+		pw := strings.Split(pass, " ")
+		p := password{
+			pass:  pw[0],
+			crypt: pw[1],
+		}
+		passwords = append(passwords, p)
+	}
+
+	var nameFound = false
+	for _, n := range views {
+		if n == name {
+			nameFound = true
+			break
+		}
+	}
+	if !nameFound {
+		return
+	}
+
+	v.Wrap = false
+	v.Autoscroll = false
+
+	mx, my := v.Size()
+
+	width := mx - 1
+	height := my
+
+	for currentPassLine, cpass := range passwords {
+
+		pos := len(cpass)
+
+		for {
+			v.Clear()
+
+			w := (width / 2) - (len(passwords[currentPassLine].pass) / 2)
+			v.SetWritePos(w, 0)
+			for i := 0; i < len(passwords[currentPassLine].pass); i++ {
+				if i != pos {
+					v.FgColor = gocui.ColorWhite
+					v.BgColor = gocui.ColorBlack
+					fmt.Fprintf(v, "%s", passwords[currentPassLine].pass[i])
+				} else {
+					v.FgColor = gocui.ColorBlack
+					v.BgColor = gocui.ColorWhite
+					fmt.Fprintf(v, "%s", passwords[currentPassLine].pass[i])
+				}
+			}
+			v.SetWritePos(0, 1)
+			v.FgColor = gocui.ColorWhite
+			fmt.Fprintf(v, "%s", passwords[currentPassLine].crypt)
+
+		}
+	}
+
+}
+
 func hack1(g *gocui.Gui, v *gocui.View, name string) {
 
 	var nameFound = false
@@ -151,6 +226,34 @@ func layout(g *gocui.Gui) error {
 	return nil
 }
 
+func passwordCrack(g *gocui.Gui) error {
+
+	// bottom right
+	maxX, maxY := g.Size()
+	x0 := maxX + 37
+	y0 := maxY - 4
+	x1 := maxX - 1
+	y1 := maxY - 1
+
+	name := "hack1"
+	v, err := g.SetView(name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+	}
+	if _, err := g.SetCurrentView(name); err != nil {
+		return err
+	}
+
+	views = append(views, name)
+	curView = len(views) - 1
+	idxView += 1
+	go pass1(g, v, name)
+	return nil
+
+}
+
 func sourceWindow(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	// 50 wide from the right side half the height
@@ -159,9 +262,8 @@ func sourceWindow(g *gocui.Gui) error {
 	x1 := maxX - 1
 	y1 := maxY / 2
 
-	//name := fmt.Sprintf("hack1", idxView)
 	name := "hack1"
-	v, err := g.SetView(name, x0, y0, x1, y1, 0) // 48x10
+	v, err := g.SetView(name, x0, y0, x1, y1, 0)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
