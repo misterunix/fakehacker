@@ -22,7 +22,6 @@ func Roll(count, sides int) int {
 	var t int
 	for i := 0; i < count; i++ {
 		r := cryptoRandSecure(int64(sides)) + 1
-		//fmt.Println("roll: ", r)
 		t = t + int(r)
 	}
 	return t
@@ -44,7 +43,7 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 		crypt string
 	}
 
-	// passwords : sline of type password
+	// passwords : slice of type password
 	var passwords []password
 	passwords = make([]password, 0) // file is 1000 entries so allocate memory
 
@@ -53,7 +52,6 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	if err != nil {
 		return
 	}
-	//fmt.Fprintf(os.Stderr, "plines: %d\n", len(plines))
 
 	// loop through the lines from the file and add to slice passwords
 	for _, pass := range plines {
@@ -63,7 +61,6 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 		p.crypt = strings.TrimSpace(pw[1])
 		passwords = append(passwords, p)
 	}
-	//fmt.Fprintf(os.Stderr, "passwords: %d\n", len(passwords))
 
 	var nameFound = false
 	for _, n := range views {
@@ -82,58 +79,57 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	mx, _ := v.Size()
 
 	width := mx - 1
-	//height := my
+	for {
+		for _, cpass := range passwords {
 
-	for _, cpass := range passwords {
+			for pos := len(cpass.pass) - 1; pos >= 0; pos-- {
 
-		randomCount := Roll(25, 10)
-		for pos := len(cpass.pass) - 1; pos >= 0; pos-- {
-			//pos := len(cpass.pass) - 1 // last character of pass
+				randomCount := Roll(25, 20)
+				for c := 0; c < randomCount; c++ {
+					var hiddenpass string
+					rc := Roll(1, (92)) + 32
+					hiddenpass = strings.Repeat("*", len(cpass.pass))
+					v.Clear()
+					v.SetWritePos(0, 0)
+					fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
 
-			for c := 0; c < randomCount; c++ {
-				var hiddenpass string
-				rc := Roll(1, (92)) + 32
-				hiddenpass = strings.Repeat("*", len(cpass.pass))
-				v.Clear()
-				v.SetWritePos(0, 0)
-				fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
+					v.SetWritePos(0, 1)
+					wp := (width / 2) - (len(cpass.pass) / 2)
+					pad := strings.Repeat(" ", wp)
+					fmt.Fprintf(v, "%s", pad)
 
-				v.SetWritePos(0, 1)
-				wp := (width / 2) - (len(cpass.pass) / 2)
-				pad := strings.Repeat(" ", wp)
-				fmt.Fprintf(v, "%s", pad)
-
-				for i := 0; i < len(cpass.pass); i++ {
-					switch {
-					case i < pos:
-						fmt.Fprintf(v, "\033[37;40m%s", string(hiddenpass[i]))
-					case i == pos:
-						fmt.Fprintf(v, "\033[30;47m%s", string(byte(rc)))
-					case i > pos:
-						fmt.Fprintf(v, "\033[37;40m%s", string(cpass.pass[i]))
+					for i := 0; i < len(cpass.pass); i++ {
+						switch {
+						case i < pos:
+							fmt.Fprintf(v, "\033[37;40m%s", string(hiddenpass[i]))
+						case i == pos:
+							fmt.Fprintf(v, "\033[30;47m%s", string(byte(rc)))
+						case i > pos:
+							fmt.Fprintf(v, "\033[37;40m%s", string(cpass.pass[i]))
+						}
 					}
+
+					g.Update(func(g *gocui.Gui) error {
+						return nil
+					})
+
+					time.Sleep(20 * time.Millisecond)
 				}
-
-				g.Update(func(g *gocui.Gui) error {
-					return nil
-				})
-
-				time.Sleep(10 * time.Millisecond)
 			}
-		}
-		v.Clear()
-		v.SetWritePos(0, 0)
-		fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
-		v.SetWritePos(0, 1)
-		wp := (width / 2) - (len(cpass.pass) / 2)
-		pad := strings.Repeat(" ", wp)
-		fmt.Fprintf(v, "%s%s", pad, cpass.pass)
-		g.Update(func(g *gocui.Gui) error {
-			return nil
-		})
-		time.Sleep(5 * time.Second)
-	}
 
+			v.Clear()
+			v.SetWritePos(0, 0)
+			fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
+			v.SetWritePos(0, 1)
+			wp := (width / 2) - (len(cpass.pass) / 2)
+			pad := strings.Repeat(" ", wp)
+			fmt.Fprintf(v, "%s%s", pad, cpass.pass)
+			g.Update(func(g *gocui.Gui) error {
+				return nil
+			})
+			time.Sleep(5 * time.Second)
+		}
+	}
 }
 
 func hack1(g *gocui.Gui, v *gocui.View, name string) {
