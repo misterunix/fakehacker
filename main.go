@@ -37,6 +37,7 @@ func cryptoRandSecure(max int64) int64 {
 }
 
 func pass1(g *gocui.Gui, v *gocui.View, name string) {
+
 	// password : holds the password and the encrypted password
 	type password struct {
 		pass  string
@@ -45,23 +46,24 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 
 	// passwords : sline of type password
 	var passwords []password
-	passwords = make([]password, 1000) // file is 1000 entries so allocate memory
+	passwords = make([]password, 0) // file is 1000 entries so allocate memory
 
 	// read the file in to a slice of strings
 	plines, err := readLines("password.txt")
 	if err != nil {
 		return
 	}
+	//fmt.Fprintf(os.Stderr, "plines: %d\n", len(plines))
 
 	// loop through the lines from the file and add to slice passwords
 	for _, pass := range plines {
 		pw := strings.Split(pass, " ")
-		p := password{
-			pass:  pw[0],
-			crypt: pw[1],
-		}
+		p := password{}
+		p.pass = strings.TrimSpace(pw[0])
+		p.crypt = strings.TrimSpace(pw[1])
 		passwords = append(passwords, p)
 	}
+	//fmt.Fprintf(os.Stderr, "passwords: %d\n", len(passwords))
 
 	var nameFound = false
 	for _, n := range views {
@@ -83,37 +85,44 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	//height := my
 
 	for _, cpass := range passwords {
+		v.Clear()
 
-		pos := len(cpass.pass) // last character of pass
+		v.SetWritePos(0, 0)
+		v.FgColor = gocui.ColorWhite
+		v.BgColor = gocui.ColorBlack
+		fmt.Fprintf(v, "%s", cpass.crypt)
 
-		for k := 0; k < len(cpass.pass); k++ {
-			randomCount := Roll(25, 10)
-			for j := 0; j < randomCount; j++ {
-				v.Clear()
-				v.SetWritePos(0, 1)
-				v.FgColor = gocui.ColorWhite
-				fmt.Fprintf(v, "%s", cpass.crypt)
+		//pos := len(cpass.pass) - 1 // last character of pass
+		//rc := byte(Roll(1, 92) + 32)
 
-				rc := byte(Roll(1, 92) + 32)
-				w := (width / 2) - (len(cpass.pass) / 2)
-				v.SetWritePos(w, 0)
-				for i := 0; i < len(cpass.pass); i++ {
-					if i != pos {
-						v.FgColor = gocui.ColorWhite
-						v.BgColor = gocui.ColorBlack
-						fmt.Fprintf(v, "%s", string(cpass.pass[i]))
-					} else {
-						v.FgColor = gocui.ColorBlack
-						v.BgColor = gocui.ColorWhite
-						fmt.Fprintf(v, "%s", string(rc))
-					}
-					g.Update(func(g *gocui.Gui) error {
-						return nil
-					})
+		v.SetWritePos(0, 1)
+		wp := (width / 2) - (len(cpass.pass) / 2)
+		pad := strings.Repeat(" ", wp)
+		//tt := fmt.Sprintf("%%%ds", wp)
+		fmt.Fprintf(v, "%s%s", pad, cpass.pass)
+
+		g.Update(func(g *gocui.Gui) error {
+			return nil
+		})
+
+		/*
+			for i := 0; i < len(cpass.pass); i++ {
+				v.SetWritePos(w+i, 0)
+				if i != pos {
+					v.FgColor = gocui.ColorWhite
+					v.BgColor = gocui.ColorBlack
+					fmt.Fprintf(v, "%s", string(cpass.pass[i]))
+				} else {
+					v.FgColor = gocui.ColorBlack
+					v.BgColor = gocui.ColorWhite
+					fmt.Fprintf(v, "%s", string(cpass.pass[i]))
 				}
+				g.Update(func(g *gocui.Gui) error {
+					return nil
+				})
 			}
-
-		}
+		*/
+		time.Sleep(1 * time.Second)
 	}
 
 }
@@ -238,24 +247,18 @@ func main() {
 }
 
 func layout(g *gocui.Gui) error {
-	maxX, maxY := g.Size()
-	v, err := g.SetView("main", maxX-10, maxY-4, maxX-1, maxY-1, 0)
-	if err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
+	/*
+		maxX, maxY := g.Size()
+		v, err := g.SetView("main", maxX-10, maxY-4, maxX-1, maxY-1, 0)
+		if err != nil {
+			if err != gocui.ErrUnknownView {
+				return err
+			}
 
-		fmt.Fprintln(v, "KEY")
-		/*
-			fmt.Fprintln(v, "Space: New View")
-			fmt.Fprintln(v, "Tab: Next View")
-			fmt.Fprintln(v, "← ↑ → ↓: Move View")
-			fmt.Fprintln(v, "Backspace: Delete View")
-			fmt.Fprintln(v, "t: Set view on top")
-			fmt.Fprintln(v, "b: Set view on bottom")
-			fmt.Fprintln(v, "^C: Exit")
-		*/
-	}
+			fmt.Fprintln(v, "KEY")
+
+		}
+	*/
 	return nil
 }
 
@@ -263,12 +266,12 @@ func passwordCrack(g *gocui.Gui) error {
 
 	// bottom right
 	maxX, maxY := g.Size()
-	x0 := maxX + 37
+	x0 := maxX - 37
 	y0 := maxY - 4
 	x1 := maxX - 1
 	y1 := maxY - 1
 
-	name := "hack1"
+	name := "pass1"
 	v, err := g.SetView(name, x0, y0, x1, y1, 0)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
