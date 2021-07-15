@@ -300,6 +300,8 @@ func delView(g *gocui.Gui) error {
 }
 */
 
+// Chunks : Split the string into a slice where each string has the max length of chunkSize.
+// Each string in the slice is left justfied and padded with spaces.
 func Chunks(s string, chunkSize int) []string {
 	if len(s) == 0 {
 		return nil
@@ -308,9 +310,6 @@ func Chunks(s string, chunkSize int) []string {
 		return []string{s}
 	}
 
-	//tt := fmt.Sprintf("%%-%d", chunkSize)
-
-	//fmt.Fprintln(os.Stderr, chunkSize)
 	var chunks []string = make([]string, 0, (len(s)-1)/chunkSize+1)
 	currentLen := 0
 	currentStart := 0
@@ -326,21 +325,14 @@ func Chunks(s string, chunkSize int) []string {
 	chunks = append(chunks, s[currentStart:])
 
 	for i, tl := range chunks {
-		/*
-			chunks[i] = strings.TrimLeft(chunks[i], "\t")
-			chunks[i] = strings.TrimSpace(chunks[i])
-			chunks[i] = strings.TrimRight(chunks[i], "\n")
-			chunks[i] = strings.TrimRight(chunks[i], "\r")
-			chunks[i] = strings.TrimRight(chunks[i], "\n")
-		*/
 		tt := fmt.Sprintf("%%-%dv", chunkSize)
 		ttt := fmt.Sprintf(tt, tl)
-		//fmt.Fprintf(os.Stderr, "%s %d\n", ttt, len(ttt))
 		chunks[i] = ttt
 	}
 	return chunks
 }
 
+// readLines : Read file from "path" spliting into lines on the newline.
 func readLines(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
