@@ -15,7 +15,7 @@ var (
 
 func main() {
 
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
+	g, err := gocui.NewGui(gocui.Output256, true)
 	if err != nil {
 		// handle error
 		fmt.Println(err)
@@ -40,6 +40,12 @@ func main() {
 	}
 
 	err = passwordCrack(g)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	err = skullWindow(g)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

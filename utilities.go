@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"crypto/rand"
 	"fmt"
+	"io/ioutil"
 	"math/big"
 	"os"
 	"strings"
@@ -73,4 +74,13 @@ func readLines(path string) ([]string, error) {
 		lines = append(lines, ss)
 	}
 	return lines, scanner.Err()
+}
+
+func readFileToString(path string) (string, error) {
+	b, err := ioutil.ReadFile("file.txt") // just pass the file name
+	if err != nil {
+		return "", err
+	}
+	r := string(b)
+	return r, nil
 }
