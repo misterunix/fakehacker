@@ -48,7 +48,9 @@ row before the </tbody></table> line.
 
 -->
 
-# Uber Go Style Guide
+# misterunix Go Style Guide
+
+adapted from [Uber Style Guide](https://github.com/uber-go/guide/blob/master/style.md)
 
 ## Table of Contents
 
@@ -67,7 +69,7 @@ row before the </tbody></table> line.
   - [Error Wrapping](#error-wrapping)
   - [Handle Type Assertion Failures](#handle-type-assertion-failures)
   - [Don't Panic](#dont-panic)
-  - [Use go.uber.org/atomic](#use-gouberorgatomic)
+  <!--- - [Use go.uber.org/atomic](#use-gouberorgatomic) -->
   - [Avoid Mutable Globals](#avoid-mutable-globals)
   - [Avoid Embedding Types in Public Structs](#avoid-embedding-types-in-public-structs)
   - [Avoid Using Built-In Names](#avoid-using-built-in-names)
@@ -1160,63 +1162,6 @@ if err != nil {
 
 <!-- TODO: Explain how to use _test packages. -->
 
-### Use go.uber.org/atomic
-
-Atomic operations with the [sync/atomic] package operate on the raw types
-(`int32`, `int64`, etc.) so it is easy to forget to use the atomic operation to
-read or modify the variables.
-
-[go.uber.org/atomic] adds type safety to these operations by hiding the
-underlying type. Additionally, it includes a convenient `atomic.Bool` type.
-
-  [go.uber.org/atomic]: https://godoc.org/go.uber.org/atomic
-  [sync/atomic]: https://golang.org/pkg/sync/atomic/
-
-<table>
-<thead><tr><th>Bad</th><th>Good</th></tr></thead>
-<tbody>
-<tr><td>
-
-```go
-type foo struct {
-  running int32  // atomic
-}
-
-func (f* foo) start() {
-  if atomic.SwapInt32(&f.running, 1) == 1 {
-     // already running…
-     return
-  }
-  // start the Foo
-}
-
-func (f *foo) isRunning() bool {
-  return f.running == 1  // race!
-}
-```
-
-</td><td>
-
-```go
-type foo struct {
-  running atomic.Bool
-}
-
-func (f *foo) start() {
-  if f.running.Swap(true) {
-     // already running…
-     return
-  }
-  // start the Foo
-}
-
-func (f *foo) isRunning() bool {
-  return f.running.Load()
-}
-```
-
-</td></tr>
-</tbody></table>
 
 ### Avoid Mutable Globals
 
