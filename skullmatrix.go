@@ -60,6 +60,32 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 		return
 	}
 
+	/*
+		var skullLines []string
+		skullLines = append(skullLines, "                                ")
+		skullLines = append(skullLines, "            ~~~~~~~~            ")
+		skullLines = append(skullLines, "          ~~~~~~~~~~~~          ")
+		skullLines = append(skullLines, "         ~~~~~~~~~~~~~~         ")
+		skullLines = append(skullLines, "        ~~~~~~~~~~~~~~~~        ")
+		skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~        ")
+		skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
+		skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
+		skullLines = append(skullLines, "       ~~~~   ~~~~   ~~~~       ")
+		skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
+		skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
+		skullLines = append(skullLines, "        ~~~    ~ ~    ~~        ")
+		skullLines = append(skullLines, "        ~~~~~~~~ ~~~~~~~~       ")
+		skullLines = append(skullLines, "        ~~~~~~~   ~~~~~~        ")
+		skullLines = append(skullLines, "            ~~~   ~~            ")
+		skullLines = append(skullLines, "          ~  ~~~~~~~ ~~         ")
+		skullLines = append(skullLines, "          ~~ ~ ~ ~ ~ ~          ")
+		skullLines = append(skullLines, "           ~         ~          ")
+		skullLines = append(skullLines, "           ~ ~     ~ ~          ")
+		skullLines = append(skullLines, "           ~~~ ~ ~ ~~           ")
+		skullLines = append(skullLines, "            ~~~~~~~~~           ")
+		skullLines = append(skullLines, "              ~~~~~             ")
+		skullLines = append(skullLines, "                                ")
+	*/
 	skullLines, err := readLinesRaw("skull.txt")
 	if err != nil {
 		return
@@ -96,7 +122,7 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 				cc = skullLine[i]
 				if cc == '~' {
 					//c = ' '
-					cs = fmt.Sprintf("\033[48;5;17m ")
+					cs = fmt.Sprintf("\033[48;5;16m ")
 				} else {
 					fs = fakeSource[o]
 					if o > 0 {
@@ -111,15 +137,16 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 					}
 
 					if fs >= 65 && fs <= 90 {
-						cs = fmt.Sprintf("\033[38;5;21m\033[48;5;17m%s", string(fs))
+						cs = fmt.Sprintf("\033[38;5;33m\033[48;5;17m%s", string(fs))
 					} else {
-						cs = fmt.Sprintf("\033[38;5;19m\033[48;5;17m%s", string(fs))
-						if fs1 >= 65 && fs <= 90 {
-							cs = fmt.Sprintf("\033[38;5;33m\033[48;5;17m%s", string(fs))
+						if (fs1 >= 65 && fs1 <= 90) || (fs2 >= 65 && fs2 <= 90) {
+							cs = fmt.Sprintf("\033[38;5;25m\033[48;5;17m%s", string(fs))
+						} else {
+							cs = fmt.Sprintf("\033[38;5;19m\033[48;5;17m%s", string(fs))
 						}
-						if fs2 >= 65 && fs <= 90 {
-							cs = fmt.Sprintf("\033[38;5;33m\033[48;5;17m%s", string(fs))
-						}
+						//if fs2 >= 65 && fs <= 90 {
+						//	cs = fmt.Sprintf("\033[38;5;21m\033[48;5;17m%s", string(fs))
+						//	}
 					}
 				}
 
@@ -139,10 +166,11 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 		//fmt.Fprintln(os.Stderr)
 
 		//v.Clear()
+		//g.SetCurrentView(name)
 		for i, s := range scroll {
 			v.SetWritePos(0, i)
 			fmt.Fprintf(v, "%s", s)
 		}
-		time.Sleep(1 * time.Second)
+		time.Sleep(60 * time.Millisecond)
 	}
 }

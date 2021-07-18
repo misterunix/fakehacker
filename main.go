@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fakehacker/ansicolor"
 	"fmt"
 	"os"
 
@@ -15,7 +14,7 @@ var (
 )
 
 func main() {
-	ansicolor.Init()
+
 	g, err := gocui.NewGui(gocui.Output256, true)
 	if err != nil {
 		// handle error

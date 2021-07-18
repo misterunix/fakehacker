@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/awesome-gocui/gocui"
@@ -69,6 +70,8 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 		lines = append(lines, y...)
 	}
 
+	//fmt.Fprintln(os.Stderr, lines)
+
 	l := len(lines)
 	cp := height
 
@@ -78,7 +81,8 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 		v.SetWritePos(0, i)
 		lastlines[i] = lines[i]
 		//fmt.Fprintf(v, "%-48v", lastlines[i])
-		fmt.Fprintf(v, "%v", lastlines[i])
+		padSpace := width - len(lastlines[i])
+		fmt.Fprintf(v, "%v%s", lastlines[i], strings.Repeat(" ", padSpace))
 		g.Update(func(g *gocui.Gui) error {
 			return nil
 		})
@@ -86,21 +90,24 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 	}
 
 	for {
-		v.Clear()
+		//v.Clear()
 		//v.SetWritePos(0, li)
-
 		//for viewLine := 0; viewLine < 4; viewLine++ {
+
 		if cp == l {
 			cp = 0
 		}
+
 		for m := 0; m <= height-2; m++ {
 			lastlines[m] = lastlines[m+1]
 			v.SetWritePos(0, m)
-			fmt.Fprintf(v, "%v", lastlines[m])
+			padSpace := width - len(lastlines[m])
+			fmt.Fprintf(v, "%v%s", lastlines[m], strings.Repeat(" ", padSpace))
 		}
 		v.SetWritePos(0, height-1)
 		lastlines[height-1] = lines[cp]
-		fmt.Fprintf(v, "%v", lastlines[height-1])
+		padSpace := width - len(lastlines[height-1])
+		fmt.Fprintf(v, "%v%s", lastlines[height-1], strings.Repeat(" ", padSpace))
 		cp++
 
 		g.Update(func(g *gocui.Gui) error {

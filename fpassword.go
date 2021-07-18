@@ -85,30 +85,38 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 
 			for pos := len(cpass.pass) - 1; pos >= 0; pos-- {
 
-				randomCount := Roll(25, 20)
+				// print crypt string
+				v.SetWritePos(0, 0)
+				fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
+
+				randomCount := Roll(25, 20) // randomCount : Number of fake attempt
 				for c := 0; c < randomCount; c++ {
+
 					var hiddenpass string
-					rc := Roll(1, (92)) + 32
-					hiddenpass = strings.Repeat("*", len(cpass.pass))
-					v.Clear()
-					v.SetWritePos(0, 0)
-					fmt.Fprintf(v, "\033[37;40m%s", cpass.crypt)
+					rc := Roll(1, (92)) + 32 // rc : random character byte
+
+					hiddenpass = strings.Repeat("*", len(cpass.pass)) // hiddenpass : string containing count of *
 
 					v.SetWritePos(0, 1)
-					wp := (width / 2) - (len(cpass.pass) / 2)
-					pad := strings.Repeat(" ", wp)
-					fmt.Fprintf(v, "%s", pad)
+					wpL := (width / 2) - (len(cpass.pass) / 2) // wpL : padding count to center password
+					padL := strings.Repeat(" ", wpL)           // padL : left padding of the pass
+					wpR := width - len(padL) - len(cpass.pass)
+					padR := strings.Repeat(" ", wpR) // padR : left padding of the pass
+
+					fmt.Fprintf(v, "%s", padL)
 
 					for i := 0; i < len(cpass.pass); i++ {
 						switch {
 						case i < pos:
-							fmt.Fprintf(v, "\033[37;40m%s", string(hiddenpass[i]))
+							fmt.Fprintf(v, "\033[48;5;0m\033[38;5;15m%s", string(hiddenpass[i]))
 						case i == pos:
-							fmt.Fprintf(v, "\033[30;47m%s", string(byte(rc)))
+							fmt.Fprintf(v, "\033[48;5;0m\033[38;5;15m%s", string(byte(rc)))
 						case i > pos:
-							fmt.Fprintf(v, "\033[37;40m%s", string(cpass.pass[i]))
+							fmt.Fprintf(v, "\033[48;5;0m\033[38;5;15m%s", string(cpass.pass[i]))
 						}
 					}
+
+					fmt.Fprintf(v, "%s", padR)
 
 					g.Update(func(g *gocui.Gui) error {
 						return nil
