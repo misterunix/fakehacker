@@ -11,7 +11,7 @@ import (
 // Width has to be 85 minumn for the window to render correctly.
 func skullWindow(g *gocui.Gui) error {
 	//maxX, maxY := g.Size()
-	// 50 wide from the right side half the height
+
 	x0 := 0
 	y0 := 0
 	x1 := 34
@@ -38,8 +38,6 @@ func skullWindow(g *gocui.Gui) error {
 // skull1 : Display the skull with matrix going from left to right.
 func skull1(g *gocui.Gui, v *gocui.View, name string) {
 
-	//var skull []string
-
 	var nameFound = false
 	for _, n := range views {
 		if n == name {
@@ -56,40 +54,38 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 
 	fakeSource, err := readFileToString("bksrc.txt")
 	if err != nil {
-		//fmt.Fprintf(os.Stderr, "%s", err)
 		return
 	}
 
-	/*
-		var skullLines []string
-		skullLines = append(skullLines, "                                ")
-		skullLines = append(skullLines, "            ~~~~~~~~            ")
-		skullLines = append(skullLines, "          ~~~~~~~~~~~~          ")
-		skullLines = append(skullLines, "         ~~~~~~~~~~~~~~         ")
-		skullLines = append(skullLines, "        ~~~~~~~~~~~~~~~~        ")
-		skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~        ")
-		skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
-		skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
-		skullLines = append(skullLines, "       ~~~~   ~~~~   ~~~~       ")
-		skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
-		skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
-		skullLines = append(skullLines, "        ~~~    ~ ~    ~~        ")
-		skullLines = append(skullLines, "        ~~~~~~~~ ~~~~~~~~       ")
-		skullLines = append(skullLines, "        ~~~~~~~   ~~~~~~        ")
-		skullLines = append(skullLines, "            ~~~   ~~            ")
-		skullLines = append(skullLines, "          ~  ~~~~~~~ ~~         ")
-		skullLines = append(skullLines, "          ~~ ~ ~ ~ ~ ~          ")
-		skullLines = append(skullLines, "           ~         ~          ")
-		skullLines = append(skullLines, "           ~ ~     ~ ~          ")
-		skullLines = append(skullLines, "           ~~~ ~ ~ ~~           ")
-		skullLines = append(skullLines, "            ~~~~~~~~~           ")
-		skullLines = append(skullLines, "              ~~~~~             ")
-		skullLines = append(skullLines, "                                ")
-	*/
-	skullLines, err := readLinesRaw("skull.txt")
-	if err != nil {
-		return
-	}
+	var skullLines []string
+	skullLines = append(skullLines, "                                ")
+	skullLines = append(skullLines, "            ~~~~~~~~            ")
+	skullLines = append(skullLines, "          ~~~~~~~~~~~~          ")
+	skullLines = append(skullLines, "         ~~~~~~~~~~~~~~         ")
+	skullLines = append(skullLines, "        ~~~~~~~~~~~~~~~~        ")
+	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~        ")
+	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
+	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
+	skullLines = append(skullLines, "       ~~~~   ~~~~   ~~~~       ")
+	skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
+	skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
+	skullLines = append(skullLines, "        ~~~    ~ ~    ~~        ")
+	skullLines = append(skullLines, "        ~~~~~~~~ ~~~~~~~~       ")
+	skullLines = append(skullLines, "        ~~~~~~~   ~~~~~~        ")
+	skullLines = append(skullLines, "            ~~~   ~~            ")
+	skullLines = append(skullLines, "          ~  ~~~~~~~ ~~         ")
+	skullLines = append(skullLines, "          ~~ ~ ~ ~ ~ ~          ")
+	skullLines = append(skullLines, "           ~         ~          ")
+	skullLines = append(skullLines, "           ~ ~     ~ ~          ")
+	skullLines = append(skullLines, "           ~~~ ~ ~ ~~           ")
+	skullLines = append(skullLines, "            ~~~~~~~~~           ")
+	skullLines = append(skullLines, "              ~~~~~             ")
+	skullLines = append(skullLines, "                                ")
+
+	//skullLines, err := readLinesRaw("skull.txt")
+	//	if err != nil {
+	//		return
+	//}
 
 	rawLineLength := len(fakeSource)
 	numSkullLines := len(skullLines)
@@ -102,8 +98,6 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 	for i := 1; i < numSkullLines; i++ {
 		offset[i] = i * d
 	}
-
-	//fmt.Fprintln(os.Stderr, offset)
 
 	var scroll = make([]string, numSkullLines)
 	var cc byte
@@ -121,8 +115,7 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 
 				cc = skullLine[i]
 				if cc == '~' {
-					//c = ' '
-					cs = fmt.Sprintf("\033[48;5;16m ")
+					cs = "\033[48;5;16m " // fmt.Sprintf("\033[48;5;16m ")
 				} else {
 					fs = fakeSource[o]
 					if o > 0 {
@@ -144,9 +137,6 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 						} else {
 							cs = fmt.Sprintf("\033[38;5;19m\033[48;5;17m%s", string(fs))
 						}
-						//if fs2 >= 65 && fs <= 90 {
-						//	cs = fmt.Sprintf("\033[38;5;21m\033[48;5;17m%s", string(fs))
-						//	}
 					}
 				}
 
@@ -159,14 +149,8 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 				offset[ind] = numSkullLines * d
 			}
 
-			//offset[ind]++
-
 		}
 
-		//fmt.Fprintln(os.Stderr)
-
-		//v.Clear()
-		//g.SetCurrentView(name)
 		for i, s := range scroll {
 			v.SetWritePos(0, i)
 			fmt.Fprintf(v, "%s", s)
