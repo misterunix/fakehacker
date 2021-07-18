@@ -98,12 +98,22 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 					//c = ' '
 					cs = fmt.Sprintf("%s ", ansicolor.BColor[17])
 				} else {
-					var fs byte
-					fs = fakeSource[o]
+					fs := fakeSource[o]
+					cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[17], string(fs))
 					if fs >= 65 && fs <= 90 {
-						cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[25], ansicolor.BColor[21], string(fs))
+						cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[21], ansicolor.BColor[19], string(fs))
 					} else {
-						cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[18], string(fs))
+						if o+1 < rawLineLength-1 {
+							if fakeSource[o+1] >= 65 && fs <= 90 {
+								cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[19], string(fs))
+							}
+						}
+						if o > 0 {
+							if fakeSource[o-1] >= 65 && fs <= 90 {
+								cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[19], string(fs))
+							}
+						}
+
 					}
 				}
 
