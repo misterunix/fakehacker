@@ -110,7 +110,7 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 						}
 						if o > 0 {
 							if fakeSource[o-1] >= 65 && fs <= 90 {
-								cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[19], string(fs))
+								cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[17], string(fs))
 							}
 						}
 
@@ -137,6 +137,6 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 			v.SetWritePos(0, i)
 			fmt.Fprintf(v, "%s", s)
 		}
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(1 * time.Second)
 	}
 }
