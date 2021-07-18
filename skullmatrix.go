@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	"github.com/awesome-gocui/gocui"
 )
@@ -37,6 +39,8 @@ func skullWindow(g *gocui.Gui) error {
 // skull1 : Display the skull with matrix going from left to right.
 func skull1(g *gocui.Gui, v *gocui.View, name string) {
 
+	//var skull []string
+
 	var nameFound = false
 	for _, n := range views {
 		if n == name {
@@ -51,16 +55,73 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 	v.Wrap = false
 	v.Autoscroll = false
 
-	// srcraw := readFileToString("bksrc.txt")
+	fakeSource, err := readFileToString("bksrc.txt")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err)
+		return
+	}
 
-	slines, err := readLines("skull.txt")
+	skullLines, err := readLinesRaw("skull.txt")
 	if err != nil {
 		return
 	}
 
-	for i, s := range slines {
-		v.SetWritePos(0, i)
-		fmt.Fprintf(v, "%s", s)
+	rawLineLength := len(fakeSource)
+	numSkullLines := len(skullLines)
+
+	var offset = make([]int, numSkullLines) // offset : Offset into the fakeSource string. Slice with the count of skullLines.
+
+	d := rawLineLength / numSkullLines
+
+	offset[0] = 0
+	for i := 1; i < numSkullLines; i++ {
+		offset[i] = i * d
 	}
 
+	fmt.Fprintln(os.Stderr, offset)
+
+	var scroll = make([]string, numSkullLines)
+	var cc byte
+	var cs string
+	for {
+
+		for ind, skullLine := range skullLines {
+
+			skullLineLen := len(skullLine)
+
+			scroll[ind] = ""
+			o := offset[ind]
+			for i := 0; i < skullLineLen; i++ {
+				//	o := offset[ind]
+				cc = skullLine[i]
+				if cc == '~' {
+					//c = ' '
+					cs = fmt.Sprintf("\033[38;5;25m\033[48;5;17m ")
+				} else {
+					cs = fmt.Sprintf("\033[38;5;20m\033[48;5;18m%s", string(fakeSource[o]))
+				}
+
+				scroll[ind] += cs //fmt.Sprintf("%s", string(c))
+				//offset[ind]++
+				o++
+
+			}
+			offset[ind]++
+			if offset[ind] >= rawLineLength {
+				offset[ind] = numSkullLines * d
+			}
+
+			//offset[ind]++
+
+		}
+
+		//fmt.Fprintln(os.Stderr)
+
+		//v.Clear()
+		for i, s := range scroll {
+			v.SetWritePos(0, i)
+			fmt.Fprintf(v, "%s", s)
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 }

@@ -28,3 +28,28 @@
 			}
 
 		}
+
+
+
+    	/*
+				if i > 0 {
+					cm = srcraw[o-1]
+				}
+				if i < jlen-1 {
+					cp = srcraw[o+1]
+				}
+			*/
+
+		/*
+				if cp >= 65 && cp <= 90 {
+					scroll[i] = fmt.Sprintf("%s", string(c))
+				} else if cm >= 65 && cm <= 90 {
+					scroll[i] = fmt.Sprintf("%s", string(c))
+				} else if c >= 65 && c <= 90 {
+					scroll[i] = fmt.Sprintf("%s", string(c))
+				} else {
+					scroll[i] = fmt.Sprintf("%s", string(c))
+				}
+			*/
+
+      
