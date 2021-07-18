@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fakehacker/ansicolor"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/awesome-gocui/gocui"
@@ -57,7 +57,7 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 
 	fakeSource, err := readFileToString("bksrc.txt")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err)
+		//fmt.Fprintf(os.Stderr, "%s", err)
 		return
 	}
 
@@ -78,7 +78,7 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 		offset[i] = i * d
 	}
 
-	fmt.Fprintln(os.Stderr, offset)
+	//fmt.Fprintln(os.Stderr, offset)
 
 	var scroll = make([]string, numSkullLines)
 	var cc byte
@@ -92,17 +92,22 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 			scroll[ind] = ""
 			o := offset[ind]
 			for i := 0; i < skullLineLen; i++ {
-				//	o := offset[ind]
+
 				cc = skullLine[i]
 				if cc == '~' {
 					//c = ' '
-					cs = fmt.Sprintf("\033[38;5;25m\033[48;5;17m ")
+					cs = fmt.Sprintf("%s ", ansicolor.BColor[17])
 				} else {
-					cs = fmt.Sprintf("\033[38;5;20m\033[48;5;18m%s", string(fakeSource[o]))
+					var fs byte
+					fs = fakeSource[o]
+					if fs >= 65 && fs <= 90 {
+						cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[25], ansicolor.BColor[21], string(fs))
+					} else {
+						cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[18], string(fs))
+					}
 				}
 
-				scroll[ind] += cs //fmt.Sprintf("%s", string(c))
-				//offset[ind]++
+				scroll[ind] += cs
 				o++
 
 			}
