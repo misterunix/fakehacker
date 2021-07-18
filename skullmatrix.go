@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fakehacker/ansicolor"
 	"fmt"
 	"time"
 
@@ -83,6 +82,7 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 	var scroll = make([]string, numSkullLines)
 	var cc byte
 	var cs string
+	var fs, fs1, fs2 byte
 	for {
 
 		for ind, skullLine := range skullLines {
@@ -96,24 +96,30 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 				cc = skullLine[i]
 				if cc == '~' {
 					//c = ' '
-					cs = fmt.Sprintf("%s ", ansicolor.BColor[17])
+					cs = fmt.Sprintf("\033[48;5;17m ")
 				} else {
-					fs := fakeSource[o]
-					cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[19], ansicolor.BColor[17], string(fs))
-					if fs >= 65 && fs <= 90 {
-						cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[21], ansicolor.BColor[17], string(fs))
+					fs = fakeSource[o]
+					if o > 0 {
+						fs1 = fakeSource[o-1]
 					} else {
-						if o+1 < rawLineLength-1 {
-							if fakeSource[o+1] >= 65 && fs <= 90 {
-								cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[17], string(fs))
-							}
-						}
-						if o > 0 {
-							if fakeSource[o-1] >= 65 && fs <= 90 {
-								cs = fmt.Sprintf("%s%s%s", ansicolor.FColor[20], ansicolor.BColor[17], string(fs))
-							}
-						}
+						fs1 = fakeSource[o]
+					}
+					if o+1 < rawLineLength-1 {
+						fs2 = fakeSource[o+1]
+					} else {
+						fs1 = fakeSource[o]
+					}
 
+					if fs >= 65 && fs <= 90 {
+						cs = fmt.Sprintf("\033[38;5;21m\033[48;5;17m%s", string(fs))
+					} else {
+						cs = fmt.Sprintf("\033[38;5;19m\033[48;5;17m%s", string(fs))
+						if fs1 >= 65 && fs <= 90 {
+							cs = fmt.Sprintf("\033[38;5;33m\033[48;5;17m%s", string(fs))
+						}
+						if fs2 >= 65 && fs <= 90 {
+							cs = fmt.Sprintf("\033[38;5;33m\033[48;5;17m%s", string(fs))
+						}
 					}
 				}
 
