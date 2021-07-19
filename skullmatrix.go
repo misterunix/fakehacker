@@ -14,7 +14,7 @@ func skullWindow(g *gocui.Gui) error {
 
 	x0 := 0
 	y0 := 0
-	x1 := 34
+	x1 := 28
 	y1 := 25
 
 	name := "skull1"
@@ -58,29 +58,29 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 	}
 
 	var skullLines []string
-	skullLines = append(skullLines, "                                ")
-	skullLines = append(skullLines, "            ~~~~~~~~            ")
-	skullLines = append(skullLines, "          ~~~~~~~~~~~~          ")
-	skullLines = append(skullLines, "         ~~~~~~~~~~~~~~         ")
-	skullLines = append(skullLines, "        ~~~~~~~~~~~~~~~~        ")
-	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~        ")
-	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
-	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~~~~~       ")
-	skullLines = append(skullLines, "       ~~~~   ~~~~   ~~~~       ")
-	skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
-	skullLines = append(skullLines, "       ~~~     ~~~    ~~~       ")
-	skullLines = append(skullLines, "        ~~~    ~ ~    ~~        ")
-	skullLines = append(skullLines, "        ~~~~~~~~ ~~~~~~~~       ")
-	skullLines = append(skullLines, "        ~~~~~~~   ~~~~~~        ")
-	skullLines = append(skullLines, "            ~~~   ~~            ")
-	skullLines = append(skullLines, "          ~  ~~~~~~~ ~~         ")
-	skullLines = append(skullLines, "          ~~ ~ ~ ~ ~ ~          ")
-	skullLines = append(skullLines, "           ~         ~          ")
-	skullLines = append(skullLines, "           ~ ~     ~ ~          ")
-	skullLines = append(skullLines, "           ~~~ ~ ~ ~~           ")
-	skullLines = append(skullLines, "            ~~~~~~~~~           ")
-	skullLines = append(skullLines, "              ~~~~~             ")
-	skullLines = append(skullLines, "                                ")
+	skullLines = append(skullLines, "                            ")
+	skullLines = append(skullLines, "          ~~~~~~~~          ")
+	skullLines = append(skullLines, "        ~~~~~~~~~~~~        ")
+	skullLines = append(skullLines, "       ~~~~~~~~~~~~~~       ")
+	skullLines = append(skullLines, "      ~~~~~~~~~~~~~~~~      ")
+	skullLines = append(skullLines, "     ~~~~~~~~~~~~~~~~~      ")
+	skullLines = append(skullLines, "     ~~~~~~~~~~~~~~~~~~     ")
+	skullLines = append(skullLines, "     ~~~~~~~~~~~~~~~~~~     ")
+	skullLines = append(skullLines, "     ~~~~   ~~~~   ~~~~     ")
+	skullLines = append(skullLines, "     ~~~     ~~~    ~~~     ")
+	skullLines = append(skullLines, "     ~~~     ~~~    ~~~     ")
+	skullLines = append(skullLines, "      ~~~    ~ ~    ~~      ")
+	skullLines = append(skullLines, "      ~~~~~~~~ ~~~~~~~~     ")
+	skullLines = append(skullLines, "      ~~~~~~~   ~~~~~~      ")
+	skullLines = append(skullLines, "          ~~~   ~~          ")
+	skullLines = append(skullLines, "        ~  ~~~~~~~ ~~       ")
+	skullLines = append(skullLines, "        ~~ ~ ~ ~ ~ ~        ")
+	skullLines = append(skullLines, "         ~         ~        ")
+	skullLines = append(skullLines, "         ~ ~     ~ ~        ")
+	skullLines = append(skullLines, "         ~~~ ~ ~ ~~         ")
+	skullLines = append(skullLines, "          ~~~~~~~~~         ")
+	skullLines = append(skullLines, "            ~~~~~           ")
+	skullLines = append(skullLines, "                            ")
 
 	//skullLines, err := readLinesRaw("skull.txt")
 	//	if err != nil {
@@ -142,7 +142,10 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 
 				scroll[ind] += cs
 				o++
-
+				if o >= rawLineLength {
+					o = numSkullLines * d
+					offset[ind] = o
+				}
 			}
 			offset[ind]++
 			if offset[ind] >= rawLineLength {

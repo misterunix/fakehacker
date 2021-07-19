@@ -8,6 +8,7 @@ import (
 	"github.com/awesome-gocui/gocui"
 )
 
+// sourceWindow : creates the gocui view for the fake source screen
 func sourceWindow(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	// 50 wide from the right side half the height
@@ -22,12 +23,6 @@ func sourceWindow(g *gocui.Gui) error {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-
-		//v.Wrap = true
-		//v.Autoscroll = true
-		//v.FgColor = gocui.ColorGreen
-
-		//fmt.Fprintln(v, strings.Repeat(name+" ", 30))
 	}
 	if _, err := g.SetCurrentView(name); err != nil {
 		return err
@@ -40,6 +35,7 @@ func sourceWindow(g *gocui.Gui) error {
 	return nil
 }
 
+// source1 : runs the fake source screen
 func source1(g *gocui.Gui, v *gocui.View, name string) {
 
 	var nameFound = false
@@ -70,8 +66,6 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 		lines = append(lines, y...)
 	}
 
-	//fmt.Fprintln(os.Stderr, lines)
-
 	l := len(lines)
 	cp := height
 
@@ -80,9 +74,10 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 	for i := 0; i < height; i++ {
 		v.SetWritePos(0, i)
 		lastlines[i] = lines[i]
-		//fmt.Fprintf(v, "%-48v", lastlines[i])
-		padSpace := width - len(lastlines[i])
-		fmt.Fprintf(v, "%v%s", lastlines[i], strings.Repeat(" ", padSpace))
+
+		padSpacingR := width - len(lastlines[i]) // padSpacingR : the number of characters needed to right pad line
+		padR := strings.Repeat(" ", padSpacingR) // padR : padding to right
+		fmt.Fprintf(v, "%v%s", lastlines[i], padR)
 		g.Update(func(g *gocui.Gui) error {
 			return nil
 		})
@@ -90,9 +85,6 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 	}
 
 	for {
-		//v.Clear()
-		//v.SetWritePos(0, li)
-		//for viewLine := 0; viewLine < 4; viewLine++ {
 
 		if cp == l {
 			cp = 0

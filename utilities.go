@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// Roll : generates a random like an old dice
 func Roll(count, sides int) int {
 	var t int
 	for i := 0; i < count; i++ {
@@ -19,6 +20,7 @@ func Roll(count, sides int) int {
 	return t
 }
 
+// cryptoRandSecure : generate random number from 0 to max
 func cryptoRandSecure(max int64) int64 {
 	nBig, err := rand.Int(rand.Reader, big.NewInt(max))
 	if err != nil {
@@ -87,7 +89,6 @@ func readLinesRaw(path string) ([]string, error) {
 	var lines []string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		//ss := strings.TrimSpace(scanner.Text())
 		lines = append(lines, scanner.Text())
 	}
 	return lines, scanner.Err()
