@@ -143,13 +143,13 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 				scroll[ind] += cs
 				o++
 				if o >= rawLineLength {
-					o = numSkullLines * d
+					o = ind * d
 					offset[ind] = o
 				}
 			}
 			offset[ind]++
 			if offset[ind] >= rawLineLength {
-				offset[ind] = numSkullLines * d
+				offset[ind] = ind * d
 			}
 
 		}
@@ -158,6 +158,6 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 			v.SetWritePos(0, i)
 			fmt.Fprintf(v, "%s", s)
 		}
-		time.Sleep(60 * time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 	}
 }
