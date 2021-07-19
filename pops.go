@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fakehacker/data"
 	"fmt"
 
 	"github.com/awesome-gocui/gocui"
@@ -19,6 +20,14 @@ func doPopups(g *gocui.Gui) error {
 
 	var x0, y0, x1, y1 int
 	maxX, maxY := g.Size()
+
+	// for now everything is one line
+	for i, dp := range data.PopUps {
+		data.PopUps[i].X0 = rnd(0, maxX-(len(dp.Msg)+4))
+		data.PopUps[i].X1 = data.PopUps[i].X0 + (len(dp.Msg) + 5)
+		data.PopUps[i].Y0 = rnd(0, maxY-4)
+		data.PopUps[i].Y1 = data.PopUps[i].Y0 + 2
+	}
 
 	count := 0
 

@@ -24,7 +24,7 @@ func Init() {
 	CreatePops("INTRUSION DETECTED", false)
 	CreatePops("CRITICAL ERROR", false)
 	CreatePops("ANTIVIRUS RUNNING", false)
-	CreatePops("EXTERNAL ACCESS DETECTED", true)
+	CreatePops("EXTERNAL ACCESS DETECTED", false)
 	CreatePops("SHUTDOWN Y/n", false)
 	CreatePops("VIRUS DETECTED", false)
 

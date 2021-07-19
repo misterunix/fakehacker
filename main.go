@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fakehacker/data"
 	"fmt"
 	"os"
 
@@ -14,6 +15,8 @@ var (
 )
 
 func main() {
+
+	data.Init()
 
 	g, err := gocui.NewGui(gocui.Output256, true)
 	if err != nil {
