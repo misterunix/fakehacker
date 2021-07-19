@@ -32,20 +32,26 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	/*
+		err = sourceWindow(g)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 
-	err = sourceWindow(g)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+			err = passwordCrack(g)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
 
-	err = passwordCrack(g)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	err = skullWindow(g)
+			err = skullWindow(g)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+	*/
+	err = doPopups(g)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
