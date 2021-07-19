@@ -20,36 +20,43 @@ func doPopups(g *gocui.Gui) error {
 	q := pop{}
 
 	count := 0
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "FAILURE"
 	q.on = false
 	p = append(p, q)
 	count++
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "INTRUSION DETECTED"
 	q.on = false
 	p = append(p, q)
 	count++
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "CRITICAL ERROR"
 	q.on = false
 	p = append(p, q)
 	count++
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "ERROR"
 	q.on = false
 	p = append(p, q)
 	count++
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "ANTIVIRUS RUNNING"
 	q.on = false
 	p = append(p, q)
 	count++
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "EXTERNAL ACCESS DETECTED"
 	q.on = false
 	p = append(p, q)
 	count++
+
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "SHUTDOWN Y/n"
 	q.on = false

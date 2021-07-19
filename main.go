@@ -94,6 +94,14 @@ func initKeybindings(g *gocui.Gui) error {
 		}); err != nil {
 		return err
 	}
+
+	if err := g.SetKeybinding("", gocui.KeyEsc, gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			return gocui.ErrQuit
+		}); err != nil {
+		return err
+	}
+
 	return nil
 }
 
