@@ -107,3 +107,19 @@ func readFileToString(path string) (string, error) {
 	r := string(b)
 	return r, nil
 }
+
+func collision(x0, y0, x1, y1, x2, y2, x3, y3 int) bool {
+
+	width1 := x1 - x0
+	height1 := y1 - y0
+	width2 := x3 - x2
+	height2 := y3 - y2
+
+	if x0 < x2+width2 &&
+		x0+width1 > x2 &&
+		y0 < y2+height2 &&
+		y0+height1 > y2 {
+		return true
+	}
+	return false
+}
