@@ -50,13 +50,13 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	/*
-		err = doPopups(g)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	*/
+
+	err = doPopups(g)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	/*
 		if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 			// handle error

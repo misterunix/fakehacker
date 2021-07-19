@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"time"
 
 	"github.com/awesome-gocui/gocui"
 )
@@ -19,56 +17,149 @@ func doPopups(g *gocui.Gui) error {
 	var p []pop
 	q := pop{}
 
+	var x0, y0, x1, y1 int
+	maxX, maxY := g.Size()
+
 	count := 0
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "FAILURE"
 	q.on = false
 	p = append(p, q)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err := g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
+	}
+	go popup(g, v, q.name, q.msg)
 	count++
+	//time.Sleep(500 * time.Millisecond)
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "INTRUSION DETECTED"
 	q.on = false
 	p = append(p, q)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err = g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
+	}
+	go popup(g, v, q.name, q.msg)
 	count++
+	//time.Sleep(500 * time.Millisecond)
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "CRITICAL ERROR"
 	q.on = false
 	p = append(p, q)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err = g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
+	}
+	go popup(g, v, q.name, q.msg)
 	count++
+	//time.Sleep(500 * time.Millisecond)
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "ERROR"
 	q.on = false
 	p = append(p, q)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err = g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
+	}
+	go popup(g, v, q.name, q.msg)
 	count++
+	//time.Sleep(500 * time.Millisecond)
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "ANTIVIRUS RUNNING"
 	q.on = false
 	p = append(p, q)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err = g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
+	}
+	go popup(g, v, q.name, q.msg)
 	count++
+	//time.Sleep(500 * time.Millisecond)
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "EXTERNAL ACCESS DETECTED"
 	q.on = false
 	p = append(p, q)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err = g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
+	}
+	go popup(g, v, q.name, q.msg)
 	count++
+	//time.Sleep(500 * time.Millisecond)
 
 	q.name = fmt.Sprintf("pop%d", count)
 	q.msg = "SHUTDOWN Y/n"
 	q.on = false
 	p = append(p, q)
-
-	l := len(p)
-
-	for i := 0; i < l; i++ {
-		go popup(g, p[i].name, p[i].msg)
+	x0 = rnd(0, maxX-(len(q.msg)+4))
+	y0 = rnd(0, maxY-4)
+	x1 = x0 + (len(q.msg) + 5)
+	y1 = y0 + 2
+	v, err = g.SetView(q.name, x0, y0, x1, y1, 0)
+	if err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		//fmt.Fprintf(os.Stderr, "g.SetView(%s,%d,%d,%d,%d) - %s\n", name, x0, y0, x1, y1, err)
 	}
+	go popup(g, v, q.name, q.msg)
+	//time.Sleep(500 * time.Millisecond)
+	//l := len(p)
 
-	time.Sleep(5 * time.Second)
+	//for i := 0; i < l; i++ {
+	//	go popup(g, p[i].name, p[i].msg)
+	//}
+
+	//time.Sleep(5 * time.Second)
 	/*
 		for i := 0; i < l; i++ {
 			err := g.DeleteView(p[i].name)
@@ -82,33 +173,17 @@ func doPopups(g *gocui.Gui) error {
 }
 
 // popup : Create a popup error.
-func popup(g *gocui.Gui, name string, message string) {
-	maxX, maxY := g.Size()
+func popup(g *gocui.Gui, v *gocui.View, name string, message string) {
 
 	msg := "  " + message + "  "
-	msgWidth := len(msg)
-
-	x0 := Roll(1, maxX-msgWidth)
-	y0 := Roll(1, maxY-2)
-	x1 := x0 + msgWidth
-	y1 := y0 + 2
-
-	v, err := g.SetView(name, x0, y0, x1, y1, 0)
-	if err != nil {
-		if err != gocui.ErrUnknownView {
-			return
-		}
-		fmt.Fprintln(os.Stderr, err)
-		fmt.Fprintln(os.Stderr, "'"+name+"'")
-	}
-	//	if _, err := g.SetCurrentView(name); err != nil {
-	//		return
-	//	}
 
 	v.Frame = true
+	v.Wrap = false
+	v.Autoscroll = false
 	fmt.Fprintf(v, "%s", msg)
 	g.Update(func(g *gocui.Gui) error {
-		return err
+		//fmt.Fprintf(os.Stderr, "g.update error\n")
+		return nil
 	})
 
 	views = append(views, name)

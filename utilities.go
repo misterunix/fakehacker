@@ -10,6 +10,11 @@ import (
 	"strings"
 )
 
+func rnd(min, max int) int {
+	r := cryptoRandSecure(int64(max-min)) + int64(min)
+	return int(r)
+}
+
 // Roll : generates a random like an old dice
 func Roll(count, sides int) int {
 	var t int
