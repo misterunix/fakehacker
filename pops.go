@@ -196,8 +196,8 @@ func PopIt(g *gocui.Gui) {
 	var i int
 
 	for {
-		rt := rnd(10, 30)
-		time.Sleep(time.Duration(rt) * time.Second)
+		rt := rnd(5, 15)
+		time.Sleep(time.Duration(rt) * time.Minute)
 		data.Pause = true
 		for {
 			i = rnd(0, len(data.PopUps)-1)
@@ -220,8 +220,8 @@ func PopIt(g *gocui.Gui) {
 			//fmt.Fprintf(os.Stderr, "g.update error\n")
 			return nil
 		})
-		rt = 1 //rnd(1, 3)
-		time.Sleep(time.Duration(rt) * time.Minute)
+		rt = rnd(45, 300)
+		time.Sleep(time.Duration(rt) * time.Second)
 		data.Pause = false
 		g.DeleteView(data.PopUps[i].Name)
 	}
