@@ -17,8 +17,10 @@ type Pop struct {
 // PopUps : slice of all the popup windows
 var PopUps []Pop
 
-func Init() {
+var Pause bool
 
+func Init() {
+	Pause = false
 	CreatePops("ERROR", true)
 	CreatePops("FAILURE", false)
 	CreatePops("INTRUSION DETECTED", false)

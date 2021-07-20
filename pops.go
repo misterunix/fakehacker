@@ -23,10 +23,16 @@ func doPopups(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 
 	for i := 0; i < len(data.PopUps); i++ {
-		data.PopUps[i].X0 = rnd(0, maxX-(len(data.PopUps[i].Msg)+4))
-		data.PopUps[i].X1 = data.PopUps[i].X0 + (len(data.PopUps[i].Msg) + 5)
-		data.PopUps[i].Y0 = rnd(0, maxY-4)
+		m := len(data.PopUps[i].Msg) + 6
+		data.PopUps[i].X0 = (maxX / 2) - (m / 2)
+		data.PopUps[i].Y0 = (maxY / 2) - 2
+		data.PopUps[i].X1 = data.PopUps[i].X0 + m
 		data.PopUps[i].Y1 = data.PopUps[i].Y0 + 2
+
+		//data.PopUps[i].X0 = rnd(0, maxX-(len(data.PopUps[i].Msg)+4))
+		//data.PopUps[i].X1 = data.PopUps[i].X0 + (len(data.PopUps[i].Msg) + 5)
+		//data.PopUps[i].Y0 = rnd(0, maxY-4)
+		//data.PopUps[i].Y1 = data.PopUps[i].Y0 + 2
 	}
 
 	go PopIt(g)
@@ -190,11 +196,12 @@ func PopIt(g *gocui.Gui) {
 	var i int
 
 	for {
-		rt := rnd(5, 15)
-		time.Sleep(time.Duration(rt) * time.Minute)
+		rt := rnd(10, 30)
+		time.Sleep(time.Duration(rt) * time.Second)
+		data.Pause = true
 		for {
 			i = rnd(0, len(data.PopUps)-1)
-			if data.PopUps[i].OnScreen {
+			if !data.PopUps[i].OnScreen {
 				break
 			}
 		}
@@ -213,8 +220,10 @@ func PopIt(g *gocui.Gui) {
 			//fmt.Fprintf(os.Stderr, "g.update error\n")
 			return nil
 		})
-		rt = rnd(1, 3)
+		rt = 1 //rnd(1, 3)
 		time.Sleep(time.Duration(rt) * time.Minute)
+		data.Pause = false
+		g.DeleteView(data.PopUps[i].Name)
 	}
 }
 

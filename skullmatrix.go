@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fakehacker/data"
 	"fmt"
 	"time"
 
@@ -158,6 +159,14 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 			v.SetWritePos(0, i)
 			fmt.Fprintf(v, "%s", s)
 		}
+
+		for {
+			if !data.Pause {
+				break
+			}
+			time.Sleep(250 * time.Millisecond)
+		}
+
 		time.Sleep(60 * time.Millisecond)
 	}
 }
