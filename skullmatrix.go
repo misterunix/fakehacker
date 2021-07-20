@@ -158,6 +158,6 @@ func skull1(g *gocui.Gui, v *gocui.View, name string) {
 			v.SetWritePos(0, i)
 			fmt.Fprintf(v, "%s", s)
 		}
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(60 * time.Millisecond)
 	}
 }
