@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fakehacker/data"
 	"fmt"
 	"os"
 
@@ -14,6 +15,8 @@ var (
 )
 
 func main() {
+
+	data.Init()
 
 	g, err := gocui.NewGui(gocui.Output256, true)
 	if err != nil {
@@ -32,25 +35,25 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	/*
-		err = sourceWindow(g)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
 
-			err = passwordCrack(g)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
+	err = sourceWindow(g)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
-			err = skullWindow(g)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-	*/
+	err = passwordCrack(g)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	err = skullWindow(g)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	err = doPopups(g)
 	if err != nil {
 		fmt.Println(err)
@@ -94,6 +97,14 @@ func initKeybindings(g *gocui.Gui) error {
 		}); err != nil {
 		return err
 	}
+
+	if err := g.SetKeybinding("", gocui.KeyEsc, gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			return gocui.ErrQuit
+		}); err != nil {
+		return err
+	}
+
 	return nil
 }
 

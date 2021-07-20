@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fakehacker/data"
 	"fmt"
 	"strings"
 	"time"
@@ -122,6 +123,13 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 					g.Update(func(g *gocui.Gui) error {
 						return nil
 					})
+
+					for {
+						if !data.Pause {
+							break
+						}
+						time.Sleep(250 * time.Millisecond)
+					}
 
 					time.Sleep(20 * time.Millisecond)
 				}
