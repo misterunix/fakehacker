@@ -36,7 +36,7 @@ func Init() {
 	CreatePops("SHUTDOWN Y/n", false)
 	CreatePops("VIRUS DETECTED", false)
 
-	Numbers = make([]Number, 10)
+	Numbers = make([]Number, 11)
 	for i := 0; i < 10; i++ {
 		Numbers[i].Line = make([]string, 5)
 	}
@@ -100,6 +100,12 @@ func Init() {
 	Numbers[9].Line[2] = "XXX"
 	Numbers[9].Line[3] = "  X"
 	Numbers[9].Line[5] = "  X"
+
+	Numbers[8].Line[0] = "   "
+	Numbers[8].Line[1] = " X "
+	Numbers[8].Line[2] = "   "
+	Numbers[8].Line[3] = " X "
+	Numbers[8].Line[5] = "   "
 
 }
 
