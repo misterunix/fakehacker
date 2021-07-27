@@ -114,7 +114,7 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 			time.Sleep(250 * time.Millisecond)
 		}
 
-		time.Sleep(80 * time.Millisecond)
+		time.Sleep(110 * time.Millisecond)
 	}
 
 }
