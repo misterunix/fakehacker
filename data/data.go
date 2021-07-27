@@ -18,6 +18,9 @@ type Number struct {
 	Line []string
 }
 
+// SourceWrap : true line wrap on fakesource
+var SourceWrap bool
+
 // PopUps : slice of all the popup windows
 var PopUps []Pop
 
@@ -26,6 +29,7 @@ var Numbers []Number
 var Pause bool
 
 func Init() {
+	SourceWrap = false
 	Pause = false
 	CreatePops("ERROR", true)
 	CreatePops("FAILURE", false)

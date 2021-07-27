@@ -61,10 +61,25 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 	width := mx - 1
 	height := my
 
-	ss, _ := readLines("hack1.txt")
-	for _, k := range ss {
-		y := Chunks(k, width)
-		lines = append(lines, y...)
+	/*
+		ss, _ := readLines("hack1.txt")
+		for _, k := range ss {
+			y := Chunks(k, width)
+			lines = append(lines, y...)
+		}
+	*/
+
+	lines, err := readLines("hack1.txt")
+	if err != nil {
+		return
+	}
+
+	if !data.SourceWrap {
+		for i, j := range lines {
+			if len(j) > width {
+				lines[i] = j[:width]
+			}
+		}
 	}
 
 	l := len(lines)
@@ -75,14 +90,14 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 	for i := 0; i < height; i++ {
 		v.SetWritePos(0, i)
 		lastlines[i] = lines[i]
-
 		padSpacingR := width - len(lastlines[i]) // padSpacingR : the number of characters needed to right pad line
 		padR := strings.Repeat(" ", padSpacingR) // padR : padding to right
 		fmt.Fprintf(v, "%v%s", lastlines[i], padR)
 		g.Update(func(g *gocui.Gui) error {
 			return nil
 		})
-		time.Sleep(80 * time.Millisecond)
+		time.Sleep(110 * time.Millisecond)
+		//time.Sleep(2 * time.Second)
 	}
 
 	for {
