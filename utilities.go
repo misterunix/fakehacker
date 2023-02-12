@@ -2,9 +2,11 @@ package main
 
 import (
 	"bufio"
+	"compress/gzip"
 	"crypto/rand"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math/big"
 	"os"
 	"strings"
@@ -64,6 +66,29 @@ func Chunks(s string, chunkSize int) []string {
 		chunks[i] = ttt
 	}
 	return chunks
+}
+
+func readGzipLines(path string) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	gz, err := gzip.NewReader(file)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer file.Close()
+	defer gz.Close()
+
+	scanner := bufio.NewScanner(gz)
+	var lines []string
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
 }
 
 // readLines : Read file from "path" spliting into lines on the newline.
