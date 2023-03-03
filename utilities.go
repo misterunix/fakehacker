@@ -68,14 +68,17 @@ func Chunks(s string, chunkSize int) []string {
 	return chunks
 }
 
+// Read in compressed file and return the contents split by <cr>
 func readGzipLines(path string) ([]string, error) {
-	file, err := os.Open(path)
+
+	// referenced file is embeded in the global space
+	file, err := efile.Open(path)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
+	// need a reader to read the gzip file
 	gz, err := gzip.NewReader(file)
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,11 +86,13 @@ func readGzipLines(path string) ([]string, error) {
 	defer file.Close()
 	defer gz.Close()
 
+	// read it line be line into a slice
 	scanner := bufio.NewScanner(gz)
 	var lines []string
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
+
 	return lines, scanner.Err()
 }
 

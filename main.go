@@ -1,12 +1,16 @@
 package main
 
 import (
+	"embed"
 	"fakehacker/data"
 	"fmt"
 	"os"
 
 	"github.com/awesome-gocui/gocui"
 )
+
+//go:embed hack1.gz
+var efile embed.FS
 
 var (
 	views   = []string{}
