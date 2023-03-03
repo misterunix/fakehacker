@@ -12,6 +12,9 @@ import (
 //go:embed hack1.gz
 var efile embed.FS
 
+//go:embed password.gz
+var pfile embed.FS
+
 var (
 	views   = []string{}
 	curView = -1

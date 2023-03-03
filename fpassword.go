@@ -50,7 +50,8 @@ func pass1(g *gocui.Gui, v *gocui.View, name string) {
 	passwords = make([]password, 0) // file is 1000 entries so allocate memory
 
 	// read the file in to a slice of strings
-	plines, err := readLines("password.txt")
+	///plines, err := readLines("password.txt")
+	plines, err := readGzipLines("password.gz", &pfile)
 	if err != nil {
 		return
 	}

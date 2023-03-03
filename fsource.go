@@ -69,7 +69,7 @@ func source1(g *gocui.Gui, v *gocui.View, name string) {
 		}
 	*/
 
-	lines, err := readGzipLines("hack1.gz")
+	lines, err := readGzipLines("hack1.gz", &efile)
 	//lines, err := readLines("hack1.txt")
 	if err != nil {
 		return

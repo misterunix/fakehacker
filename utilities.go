@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"compress/gzip"
 	"crypto/rand"
+	"embed"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -69,10 +70,10 @@ func Chunks(s string, chunkSize int) []string {
 }
 
 // Read in compressed file and return the contents split by <cr>
-func readGzipLines(path string) ([]string, error) {
+func readGzipLines(path string, gzFile *embed.FS) ([]string, error) {
 
 	// referenced file is embeded in the global space
-	file, err := efile.Open(path)
+	file, err := gzFile.Open(path)
 	if err != nil {
 		log.Fatal(err)
 	}
