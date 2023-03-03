@@ -2,7 +2,8 @@
 
 Fun little program to learn gocui.
 
-I started this over two years ago (go 1.16) and recently got bored (go 1.20) so its time to play with it again.
+Changed the LICENSE to the more permissive [3-Clause BSD](https://opensource.org/license/bsd-3-clause/) License.
+
 
 ![screenshot](screenshot.png)
 
